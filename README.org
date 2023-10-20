@@ -1,6 +1,9 @@
-* XENODM Config
+#+TITLE: Iz's XenoDM Config
+#+DESCRIPTION: Mainly for personal backups, but if you want 'em, use 'em.
+#+KEYWORDS: org-mode, readme, OpenBSD, XenoDM, sh, ksh, xresources, izder
+#+PROPERTY: header-args: :tangle ~/.dotfiles/XenoDM-Config :mkdirp t
 
-** =Xresource=
+* Xresources
 
 #+BEGIN_SRC conf :tangle Xresources
 xlogin*login.translations: #override \
@@ -108,7 +111,7 @@ URxvt.allowSendEvents: true
 *.activeForeground: #d5c4a1
 #+END_SRC
 
-** =Setup=
+* Setup
 
 #+BEGIN_SRC shell :tangle Xsetup_0
 #!/bin/ksh
@@ -168,7 +171,7 @@ ${XCLOCK_WIDTH}x${XCLOCK_HEIGHT}+${XCLOCK_XPOS}+${XCLOCK_YOFFSET} &
 (sleep 5 && xwd -out /tmp/xenodm.xwd -root) &
 #+END_SRC
 
-** =GiveConsole=
+* GiveConsole
 
 #+BEGIN_SRC shell :tangle GiveConsole
 #!/bin/ksh
