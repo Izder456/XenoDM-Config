@@ -1,12 +1,7 @@
 #+TITLE: Iz's XenoDM Config
 #+DESCRIPTION: Mainly for personal backups, but if you want 'em, use 'em.
-<<<<<<< HEAD
 #+KEYWORDS: org-mode, readme, OpenBSD, XenoDM, sh, ksh, xresources, izder
 #+PROPERTY: header-args: :tangle ~/.dotfiles/XenoDM-Config :mkdirp t
-=======
-#+KEYWORDS: org-mode, xenodm, openbsd, readme, sh, ksh, xresources, izder
-#+PROPERTY: header-args: :tangle ~/.dotfiles/StumpWM-Config :mkdirp t
->>>>>>> f1ad76b (update XenoDM submodule)
 
 * Xresources
 
