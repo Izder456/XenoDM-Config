@@ -3,6 +3,22 @@
 #+KEYWORDS: org-mode, readme, OpenBSD, XenoDM, sh, ksh, xresources, izder
 #+PROPERTY: header-args: :tangle ~/.dotfiles/XenoDM-Config :mkdirp t
 
+* DISCLAIMER
+
+- I'm not responsible for any system breakage due to my code.
+
+- If you're unsure, refer to [[LICENSE.txt][THE LICENSE]] to see how seriously I take this.
+
+- /Use with *caution*/
+
+-----
+
+* Table of Contents :TOC_4:
+- [[#disclaimer][DISCLAIMER]]
+- [[#xresources][Xresources]]
+- [[#setup][Setup]]
+- [[#giveconsole][GiveConsole]]
+
 * Xresources
 
 #+BEGIN_SRC conf :tangle Xresources
