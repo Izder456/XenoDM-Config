@@ -33,15 +33,21 @@ xlogin*login.translations: #override \
 	Ctrl<Key>Return: set-session-argument(failsafe) finish-field()\n\
 	<Key>Return: set-session-argument() finish-field()
 
-xlogin*greeting: (WELCOME)
-xlogin*namePrompt: (-USER =:)
-xlogin*passwdPrompt: (-PASS =:)
-xlogin*fail: (TOOBAD!)
+*.foreground: #fbf1c7
+*.Foreground: #fbf1c7
+*.background: #1d2021
+*.Background: #1d2021
+*.cursorColor: #fbf1c7
+	
+xlogin*greeting: XenoDM Login
+xlogin*namePrompt: \040\040user=>
+xlogin*passwdPrompt: \040\040pass=>
+xlogin*fail: Login incorrect or forbidden
 
-xlogin*greetFace:       Spleen-16:Regular:dpi=96
-xlogin*face:            Spleen:Regular:dpi=96
-xlogin*promptFace:      Spleen:Regular:dpi=96
-xlogin*failFace:        Spleen:Regular:dpi=96
+xlogin*greetFace:       FreeSerif-16:style=Bold Italic:dpi=96
+xlogin*face:            FreeSerif-12:style=Regular:dpi=96
+xlogin*promptFace:      Spleen-12:style=Regular:dpi=96
+xlogin*failFace:        FreeSerif-14:style=Bold Italic:dpi=96
 
 xconsole*font:		-*-spleen-*-*-*-*-12-*-*-*-*-*-*-*
 xconsole*scrollBar: false
@@ -50,8 +56,8 @@ xconsole*borderColor: #ebdbb2
 xconsole*iconic:    true
 xconsole*verbose:   true
 
-xmessage*background: #282828
-xmessage*foreground: #ebdbb2
+xmessage*background: #1d2021
+xmessage*foreground: #fbf1c7
 xmessage.borderWidth: 4
 xmessage*borderColor: #ebdbb2
 xmessage*message.scrollHorizontal: Never
@@ -62,26 +68,26 @@ xmessage*font:      -*-spleen-*-*-*-*-12-*-*-*-*-*-*-*
 
 xclock*borderWidth: 4
 xclock*borderColor: #ebdbb2
-xclock*majorColor: #ebdbb2
+xclock*majorColor: #fbf1c7
 xclock*minorColor: #ebdbb2
-xclock*hourColor: #665c54
+xclock*hourColor: #a89984
 xclock*minuteColor: #ebdbb2
-xclock*secondColor: #d5c4a1
+xclock*secondColor: #8ec07c
 
 ! border/shadow
 xlogin*borderWidth: 4
 xlogin*borderColor: #d5c4a1
 xlogin.Login.sepWidth: 2
 xlogin.Login.hiColor: #665c54
-xlogin.Login.greetColor: #fb4934
-xlogin.Login.failColor: #d5c4a1
-xlogin.Login.promptColor: #fabd2f
+xlogin.Login.greetColor: #fe8019
+xlogin.Login.failColor: #cc241d
+xlogin.Login.promptColor: #d79921
 xlogin.Login.foreground: #32302f
-xlogin.Login.background: #32302f
-xlogin.Login.cursorColor: #d5c4a1
-xlogin.Login.inpColor: #d5c4a1
+xlogin.Login.background: #1d2021
+xlogin.Login.cursorColor: #bdae93
+xlogin.Login.inpColor: #ebdbb2
 
-xlogin*logoFileName: /etc/X11/xenodm/pixmaps/srcerizder.xpm
+xlogin*logoFileName: /etc/X11/xenodm/pixmaps/striped_srcerizder.xpm
 
 xlogin*useShape: true
 xlogin*logoPadding: 14
@@ -92,11 +98,6 @@ URxvt.selectToClibboard: true
 xterm*allowSendEvents: true
 URxvt.allowSendEvents: true
 
-*.foreground: #d5c4a1
-*.Foreground: #d5c4a1
-*.background: #32302f
-*.Background: #32302f
-*.cursorColor: #d5c4a1
 
 *.color0: #32302f
 *.color1: #fb4934
@@ -155,14 +156,14 @@ XMESG_XPOS=$((($XWIDTH - $XMESG_WIDTH) / 2))
 
 XCONSOLE_WIDTH=512
 XCONSOLE_HEIGHT=128
-XCONSOLE_YOFFSET=128
+XCONSOLE_YOFFSET=80
 XCONSOLE_XPOS=$((($XWIDTH - $XCONSOLE_WIDTH) / 2))
 
 (
 while true; do
-    xmessage -center \
-        -buttons "(-SLEEP[])":20,"(-RESTART[])":21,"(-SHUTDOWN[])":22 "" \
-        -geometry ${XMESG_WIDTH}x${XMESG_HEIGHT}+${XMESG_XPOS}+${XMESG_YOFFSET}
+    xmessage "System Menu" \
+        -buttons "SLEEP[]":20,"RESTART[]":21,"SHUTDOWN[]":22,"SCROT[]":23 "" \
+        -geometry ${XMESG_WIDTH}x${XMESG_HEIGHT}+${XMESG_XPOS}-${XMESG_YOFFSET}
     ACTION=$?
     echo "Xmessage said: $ACTION"
     if   [ $ACTION -eq 20 ]; then /usr/sbin/zzz;
@@ -172,7 +173,10 @@ while true; do
     elif [ $ACTION -eq 22 ]; then
       xsetroot -cursor_name watch
       /sbin/shutdown -p now
-    else echo "Something bad happened to Xmessage.";
+    elif [ $ACTION -eq 23 ]; then
+	xwd -out /tmp/xenodm.xwd -root
+	print "Took Screenshot at /tmp/xenodm.xwd" >/dev/console
+    else print "Something bad happened to Xmessage.">/dev/console;
     fi
     if [ -z "$(pgrep -U root xconsole)" ]; then break; fi
 done

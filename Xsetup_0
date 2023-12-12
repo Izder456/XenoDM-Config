@@ -23,14 +23,14 @@ XMESG_XPOS=$((($XWIDTH - $XMESG_WIDTH) / 2))
 
 XCONSOLE_WIDTH=512
 XCONSOLE_HEIGHT=128
-XCONSOLE_YOFFSET=128
+XCONSOLE_YOFFSET=80
 XCONSOLE_XPOS=$((($XWIDTH - $XCONSOLE_WIDTH) / 2))
 
 (
 while true; do
-    xmessage -center \
-        -buttons "(-SLEEP[])":20,"(-RESTART[])":21,"(-SHUTDOWN[])":22 "" \
-        -geometry ${XMESG_WIDTH}x${XMESG_HEIGHT}+${XMESG_XPOS}+${XMESG_YOFFSET}
+    xmessage "System Menu" \
+        -buttons "SLEEP[]":20,"RESTART[]":21,"SHUTDOWN[]":22,"SCROT[]":23 "" \
+        -geometry ${XMESG_WIDTH}x${XMESG_HEIGHT}+${XMESG_XPOS}-${XMESG_YOFFSET}
     ACTION=$?
     echo "Xmessage said: $ACTION"
     if   [ $ACTION -eq 20 ]; then /usr/sbin/zzz;
@@ -40,7 +40,10 @@ while true; do
     elif [ $ACTION -eq 22 ]; then
       xsetroot -cursor_name watch
       /sbin/shutdown -p now
-    else echo "Something bad happened to Xmessage.";
+    elif [ $ACTION -eq 23 ]; then
+	xwd -out /tmp/xenodm.xwd -root
+	print "Took Screenshot at /tmp/xenodm.xwd" >/dev/console
+    else print "Something bad happened to Xmessage.">/dev/console;
     fi
     if [ -z "$(pgrep -U root xconsole)" ]; then break; fi
 done
