@@ -22,6 +22,10 @@
 * Xresources
 
 #+BEGIN_SRC conf :tangle Xresources
+!!
+! Keybinds
+!!
+
 xlogin*login.translations: #override \
 	<Key>F1: set-session-argument(failsafe) finish-field()\n\
 	<Key>Left: move-backward-character()\n\
@@ -33,21 +37,37 @@ xlogin*login.translations: #override \
 	Ctrl<Key>Return: set-session-argument(failsafe) finish-field()\n\
 	<Key>Return: set-session-argument() finish-field()
 
-*.foreground: #fbf1c7
-*.Foreground: #fbf1c7
-*.background: #1d2021
-*.Background: #1d2021
-*.cursorColor: #fbf1c7
-	
+!!
+! Basic Colors
+!!
+
+,*.foreground: #fbf1c7
+,*.Foreground: #fbf1c7
+,*.background: #1d2021
+,*.Background: #1d2021
+,*.activeBackground: #32302f
+,*.activeForeground: #d5c4a1
+,*.cursorColor: #fbf1c7
+
+!!
+! Prompts
+!!
+
+! Strings
 xlogin*greeting: XenoDM Login
 xlogin*namePrompt: \040\040user=>
 xlogin*passwdPrompt: \040\040pass=>
 xlogin*fail: Login incorrect or forbidden
 
+! Fontfaces
 xlogin*greetFace:       FreeSerif-16:style=Bold Italic:dpi=96
 xlogin*face:            FreeSerif-12:style=Regular:dpi=96
 xlogin*promptFace:      Spleen-12:style=Regular:dpi=96
 xlogin*failFace:        FreeSerif-14:style=Bold Italic:dpi=96
+
+!!
+! XConsole
+!!
 
 xconsole*font:		-*-spleen-*-*-*-*-12-*-*-*-*-*-*-*
 xconsole*scrollBar: false
@@ -55,6 +75,10 @@ xconsole*borderWidth: 4
 xconsole*borderColor: #ebdbb2
 xconsole*iconic:    true
 xconsole*verbose:   true
+
+!!
+! XMessage
+!!
 
 xmessage*background: #1d2021
 xmessage*foreground: #fbf1c7
@@ -66,6 +90,10 @@ xmessage*timeout: 0
 xmessage*printValue: false
 xmessage*font:      -*-spleen-*-*-*-*-12-*-*-*-*-*-*-*
 
+!!
+! XClock
+!!
+
 xclock*borderWidth: 4
 xclock*borderColor: #ebdbb2
 xclock*majorColor: #fbf1c7
@@ -74,9 +102,15 @@ xclock*hourColor: #a89984
 xclock*minuteColor: #ebdbb2
 xclock*secondColor: #8ec07c
 
+!!
+! XLogin
+!!
+
 ! border/shadow
 xlogin*borderWidth: 4
 xlogin*borderColor: #d5c4a1
+
+! Login Box
 xlogin.Login.sepWidth: 2
 xlogin.Login.hiColor: #665c54
 xlogin.Login.greetColor: #fe8019
@@ -86,18 +120,15 @@ xlogin.Login.foreground: #32302f
 xlogin.Login.background: #1d2021
 xlogin.Login.cursorColor: #bdae93
 xlogin.Login.inpColor: #ebdbb2
-
-xlogin*logoFileName: /etc/X11/xenodm/pixmaps/striped_srcerizder.xpm
-
 xlogin*useShape: true
+
+! Login Logo
+xlogin*logoFileName: /etc/X11/xenodm/pixmaps/striped_srcerizder.xpm
 xlogin*logoPadding: 14
 
-xterm*scrollBar: false
-xterm*selectToClipboard: true
-URxvt.selectToClibboard: true
-xterm*allowSendEvents: true
-URxvt.allowSendEvents: true
-
+!!
+! Colors
+!!
 
 *.color0: #32302f
 *.color1: #fb4934
@@ -123,9 +154,6 @@ URxvt.allowSendEvents: true
 *.color19: #504945
 *.color20: #bdae93
 *.color21: #ebdbb2
-
-*.activeBackground: #32302f
-*.activeForeground: #d5c4a1
 #+END_SRC
 
 * Setup
@@ -133,68 +161,109 @@ URxvt.allowSendEvents: true
 #+BEGIN_SRC shell :tangle Xsetup_0
 #!/bin/ksh
 
-xrandr --output default --dpi 96
-xset b on
-xset fp+ /usr/local/share/fonts/spleen
+xrandr --output default --dpi 96 # Set Screen DPI
+xset b on # Re-Enable XBELL
+xset fp+ /usr/local/share/fonts/spleen # Add Spleen to the XFONTS
+
+# Set Prefix for commands used
 prefix="/usr/X11R6"
 exec_prefix="${prefix}"
 
+# Grab the Screen Dimentions and save into globals
 XWIDTH=$(xdpyinfo | awk '/dimensions/ {print $2}' | cut -d 'x' -f 1)
 XHEIGHT=$(xdpyinfo | awk '/dimensions/ {print $2}' | cut -d 'x' -f 2)
 
+# Randomized the wallpaper and fill
 /usr/local/bin/feh --bg-fill "$(/usr/local/bin/shuf -n1 -e /usr/local/share/backgrounds/*)" &
 
+##
+# Set program geometry
+##
+
+# XClock
 XCLOCK_WIDTH=128
 XCLOCK_HEIGHT=128
 XCLOCK_YOFFSET=64
 XCLOCK_XPOS=$((($XWIDTH - $XCLOCK_WIDTH) / 2))
 
+# XMessage
 XMESG_WIDTH=256
 XMESG_HEIGHT=64
 XMESG_YOFFSET=256
 XMESG_XPOS=$((($XWIDTH - $XMESG_WIDTH) / 2))
 
+# XConsole
 XCONSOLE_WIDTH=512
 XCONSOLE_HEIGHT=128
 XCONSOLE_YOFFSET=80
 XCONSOLE_XPOS=$((($XWIDTH - $XCONSOLE_WIDTH) / 2))
 
+##
+# Menu Event Loop
+##
+
+# We need to () this to block it.
 (
 while true; do
+    # Display the message window with buttons, assigned to click events 20, 21, 22, & 23 respectively
     xmessage "System Menu" \
         -buttons "SLEEP[]":20,"RESTART[]":21,"SHUTDOWN[]":22,"SCROT[]":23 "" \
         -geometry ${XMESG_WIDTH}x${XMESG_HEIGHT}+${XMESG_XPOS}-${XMESG_YOFFSET}
+    # Grab click event number, assign to ACTION
     ACTION=$?
+    # Yell to stdout what happened
     echo "Xmessage said: $ACTION"
-    if   [ $ACTION -eq 20 ]; then /usr/sbin/zzz;
-    elif [ $ACTION -eq 21 ]; then
+
+    ##
+    # Action Handling
+    ##
+
+    if   [ $ACTION -eq 20 ];
+    then # Sleep Action
+	/usr/sbin/zzz;
+    elif [ $ACTION -eq 21 ];
+    then # Reboot Host
       xsetroot -cursor_name watch
       /sbin/shutdown -r now
-    elif [ $ACTION -eq 22 ]; then
+    elif [ $ACTION -eq 22 ];
+    then # Halt Host
       xsetroot -cursor_name watch
       /sbin/shutdown -p now
-    elif [ $ACTION -eq 23 ]; then
+    elif [ $ACTION -eq 23 ];
+    then # Take Screenshot
 	xwd -out /tmp/xenodm.xwd -root
 	print "Took Screenshot at /tmp/xenodm.xwd" >/dev/console
-    else print "Something bad happened to Xmessage.">/dev/console;
+    else
+	print "Something bad happened to Xmessage.">/dev/console;
     fi
-    if [ -z "$(pgrep -U root xconsole)" ]; then break; fi
+    if [ -z "$(pgrep -U root xconsole)" ];
+    then # Halt Event Loop
+	break;
+    fi
 done
 ) &
 
+##
+# Spawn Client Windows With Organization
+##
+
+# XConsole
 xconsole -daemon -notify -verbose -exitOnFail -geometry \
 ${XCONSOLE_WIDTH}x${XCONSOLE_HEIGHT}+${XCONSOLE_XPOS}-${XCONSOLE_YOFFSET} &
 
+# XClock
 xclock -analog -update 1 -padding 12 -sharp -geometry \
 ${XCLOCK_WIDTH}x${XCLOCK_HEIGHT}+${XCLOCK_XPOS}+${XCLOCK_YOFFSET} &
-
-(sleep 5 && xwd -out /tmp/xenodm.xwd -root) &
 #+END_SRC
 
 * GiveConsole
 
 #+BEGIN_SRC shell :tangle GiveConsole
 #!/bin/ksh
+
+# Set Prefix for commands used
+prefix="/usr/X11R6"
+exec_prefix="${prefix}"
 prefix="/usr/X11R6"
 exec_prefix="${prefix}"
 
@@ -203,6 +272,7 @@ pkill xclock
 pkill xconsole
 pkill xmessage
 
+# Pass Ownership to the user
 chown $USER:$GROUP /dev/console
 if [ -c /dev/dri/card0 ]; then
     chown $USER:$GROUP /dev/dri/card0
@@ -210,23 +280,7 @@ fi
 if [ -c /dev/dri/renderD128 ]; then
     chown $USER:$GROUP /dev/dri/renderD128
 fi
-${exec_prefix}/bin/sessreg -a -l $DISPLAY -u none $USER
 
-#!/bin/ksh
-prefix="/usr/X11R6"
-exec_prefix="${prefix}"
-
-# Kill XCLOCK, XMESSAGE, & XCONSOLE upon Session Load
-pkill xclock
-pkill xconsole
-pkill xmessage
-
-chown $USER /dev/console
-if [ -c /dev/dri/card0 ]; then
-    chown $USER /dev/dri/card0
-fi
-if [ -c /dev/dri/renderD128 ]; then
-    chown $USER /dev/dri/renderD128
-fi
+# Register Session to the user
 ${exec_prefix}/bin/sessreg -a -l $DISPLAY -u none $USER
 #+END_SRC
