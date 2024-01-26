@@ -3,6 +3,14 @@
 #+KEYWORDS: org-mode, readme, OpenBSD, XenoDM, sh, ksh, xresources, izder
 #+PROPERTY: header-args: :tangle ~/.dotfiles/XenoDM-Config :mkdirp t
 
+
+
+#+BEGIN_HTML
+<div align="left">
+  <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/izder456/XenoDM-Config?style=plastic">
+</div>
+#+END_HTML
+
 * DISCLAIMER
 
 - I'm not responsible for any system breakage due to my code.
