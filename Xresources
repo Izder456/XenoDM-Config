@@ -3,15 +3,15 @@
 !!
 
 xlogin*login.translations: #override \
-	<Key>F1: set-session-argument(failsafe) finish-field()\n\
-	<Key>Left: move-backward-character()\n\
-	<Key>Right: move-forward-character()\n\
-	<Key>Home: move-to-begining()\n\
-	<Key>End: move-to-end()\n\
-	Ctrl<Key>KP_Enter: set-session-argument(failsafe) finish-field()\n\
-	<Key>KP_Enter: set-session-argument() finish-field()\n\
-	Ctrl<Key>Return: set-session-argument(failsafe) finish-field()\n\
-	<Key>Return: set-session-argument() finish-field()
+  <Key>F1: set-session-argument(failsafe) finish-field()\n\
+  <Key>Left: move-backward-character()\n\
+  <Key>Right: move-forward-character()\n\
+  <Key>Home: move-to-begining()\n\
+  <Key>End: move-to-end()\n\
+  Ctrl<Key>KP_Enter: set-session-argument(failsafe) finish-field()\n\
+  <Key>KP_Enter: set-session-argument() finish-field()\n\
+  Ctrl<Key>Return: set-session-argument(failsafe) finish-field()\n\
+  <Key>Return: set-session-argument() finish-field()
 
 !!
 ! Basic Colors
@@ -45,7 +45,7 @@ xlogin*failFace:        FreeSerif-14:style=Bold Italic:dpi=96
 ! XConsole
 !!
 
-xconsole*font:		-*-spleen-*-*-*-*-12-*-*-*-*-*-*-*
+xconsole*font:    -*-spleen-*-*-*-*-12-*-*-*-*-*-*-*
 xconsole*scrollBar: false
 xconsole*borderWidth: 4
 xconsole*borderColor: #ebdbb2

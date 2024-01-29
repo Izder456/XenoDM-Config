@@ -43,43 +43,38 @@ XCONSOLE_XPOS=$((($XWIDTH - $XCONSOLE_WIDTH) / 2))
 
 # We need to () this to block it.
 (
-while true; do
-    # Display the message window with buttons, assigned to click events 20, 21, 22, & 23 respectively
-    xmessage "System Menu" \
-        -buttons "SLEEP[]":20,"RESTART[]":21,"SHUTDOWN[]":22,"SCROT[]":23 "" \
-        -geometry ${XMESG_WIDTH}x${XMESG_HEIGHT}+${XMESG_XPOS}-${XMESG_YOFFSET}
-    # Grab click event number, assign to ACTION
-    ACTION=$?
-    # Yell to stdout what happened
-    echo "Xmessage said: $ACTION"
+    while true; do
+        # Display the message window with buttons, assigned to click events 20, 21, 22, & 23 respectively
+        xmessage "System Menu" \
+                 -buttons "SLEEP[]":20,"RESTART[]":21,"SHUTDOWN[]":22,"SCROT[]":23 "" \
 
-    ##
-    # Action Handling
-    ##
+                 -geometry ${XMESG_WIDTH}x${XMESG_HEIGHT}+${XMESG_XPOS}-${XMESG_YOFFSET}
+        # Grab click event number, assign to ACTION
+        ACTION=$?
+        # Yell to stdout what happened
+        echo "Xmessage said: $ACTION"
 
-    if   [ $ACTION -eq 20 ];
-    then # Sleep Action
-	/usr/sbin/zzz;
-    elif [ $ACTION -eq 21 ];
-    then # Reboot Host
-      xsetroot -cursor_name watch
-      /sbin/shutdown -r now
-    elif [ $ACTION -eq 22 ];
-    then # Halt Host
-      xsetroot -cursor_name watch
-      /sbin/shutdown -p now
-    elif [ $ACTION -eq 23 ];
-    then # Take Screenshot
-	xwd -out /tmp/xenodm.xwd -root
-	print "Took Screenshot at /tmp/xenodm.xwd" >/dev/console
-    else
-	print "Something bad happened to Xmessage.">/dev/console;
-    fi
-    if [ -z "$(pgrep -U root xconsole)" ];
-    then # Halt Event Loop
-	break;
-    fi
-done
+        ##
+        # Action Handling
+        ##
+        if   [ $ACTION -eq 20 ]; then # Sleep Action
+            /usr/sbin/zzz;
+        elif [ $ACTION -eq 21 ]; then # Reboot Host
+            xsetroot -cursor_name watch
+            /sbin/shutdown -r now
+        elif [ $ACTION -eq 22 ]; then # Halt Host
+            xsetroot -cursor_name watch
+            /sbin/shutdown -p now
+        elif [ $ACTION -eq 23 ]; then # Take Screenshot
+            xwd -out /tmp/xenodm.xwd -root
+            print "Took Screenshot at /tmp/xenodm.xwd" >/dev/console
+        else
+            print "XMessage said: WATING">/dev/console;
+        fi
+        if [ -z "$(pgrep -U root xconsole)" ]; then # Halt Event Loop
+            break;
+        fi
+    done
 ) &
 
 ##
@@ -88,8 +83,8 @@ done
 
 # XConsole
 xconsole -daemon -notify -verbose -exitOnFail -geometry \
-${XCONSOLE_WIDTH}x${XCONSOLE_HEIGHT}+${XCONSOLE_XPOS}-${XCONSOLE_YOFFSET} &
+         ${XCONSOLE_WIDTH}x${XCONSOLE_HEIGHT}+${XCONSOLE_XPOS}-${XCONSOLE_YOFFSET} &
 
 # XClock
 xclock -analog -update 1 -padding 12 -sharp -geometry \
-${XCLOCK_WIDTH}x${XCLOCK_HEIGHT}+${XCLOCK_XPOS}+${XCLOCK_YOFFSET} &
+       ${XCLOCK_WIDTH}x${XCLOCK_HEIGHT}+${XCLOCK_XPOS}+${XCLOCK_YOFFSET} &
