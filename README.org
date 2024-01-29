@@ -225,7 +225,6 @@ XCONSOLE_XPOS=$((($XWIDTH - $XCONSOLE_WIDTH) / 2))
         # Display the message window with buttons, assigned to click events 20, 21, 22, & 23 respectively
         xmessage "System Menu" \
                  -buttons "SLEEP[]":20,"RESTART[]":21,"SHUTDOWN[]":22,"SCROT[]":23 "" \
-
                  -geometry ${XMESG_WIDTH}x${XMESG_HEIGHT}+${XMESG_XPOS}-${XMESG_YOFFSET}
         # Grab click event number, assign to ACTION
         ACTION=$?
