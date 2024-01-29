@@ -68,7 +68,7 @@ XCONSOLE_XPOS=$((($XWIDTH - $XCONSOLE_WIDTH) / 2))
             xwd -out /tmp/xenodm.xwd -root
             print "Took Screenshot at /tmp/xenodm.xwd" >/dev/console
         else
-            print "XMessage said: WATING">/dev/console;
+            print "XMessage said: WAITING">/dev/console;
         fi
         if [ -z "$(pgrep -U root xconsole)" ]; then # Halt Event Loop
             break;

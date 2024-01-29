@@ -23,18 +23,9 @@
 
 * Table of Contents :TOC_4:
 - [[#disclaimer][DISCLAIMER]]
-- [[#editorconfig][Editorconfig]]
 - [[#xresources][Xresources]]
 - [[#setup][Setup]]
 - [[#giveconsole][GiveConsole]]
-
-* Editorconfig
-
-#+BEGIN_SRC toml :tangle .editorconfig
-[*]
-indent_style = space
-indent_size = 2
-#+END_SRC
 
 * Xresources
 
@@ -246,7 +237,7 @@ XCONSOLE_XPOS=$((($XWIDTH - $XCONSOLE_WIDTH) / 2))
             xwd -out /tmp/xenodm.xwd -root
             print "Took Screenshot at /tmp/xenodm.xwd" >/dev/console
         else
-            print "XMessage said: WATING">/dev/console;
+            print "XMessage said: WAITING">/dev/console;
         fi
         if [ -z "$(pgrep -U root xconsole)" ]; then # Halt Event Loop
             break;
