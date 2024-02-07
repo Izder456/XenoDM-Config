@@ -120,14 +120,16 @@ xlogin*borderColor: #d5c4a1
 
 ! Login Box
 xlogin.Login.sepWidth: 2
+xlogin.Login.echoPasswd: true
 xlogin.Login.hiColor: #665c54
+xlogin.Login.shdColor: #282828
 xlogin.Login.greetColor: #fe8019
 xlogin.Login.failColor: #cc241d
 xlogin.Login.promptColor: #d79921
-xlogin.Login.foreground: #32302f
-xlogin.Login.background: #1d2021
 xlogin.Login.cursorColor: #bdae93
 xlogin.Login.inpColor: #ebdbb2
+xlogin.Login.foreground: #32302f
+xlogin.Login.background: #1d2021
 xlogin*useShape: true
 
 ! Login Logo
