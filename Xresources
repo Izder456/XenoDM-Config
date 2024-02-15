@@ -38,16 +38,16 @@ xlogin*fail: Login incorrect or forbidden
 ! Fontfaces
 xlogin*greetFace:       FreeSerif-16:style=Bold Italic:dpi=96
 xlogin*face:            FreeSerif-12:style=Regular:dpi=96
-xlogin*promptFace:      Spleen-12:style=Regular:dpi=96
+xlogin*promptFace:      Spleen-16:style=Regular:dpi=96
 xlogin*failFace:        FreeSerif-14:style=Bold Italic:dpi=96
 
 !!
 ! XConsole
 !!
 
-xconsole*font:    -*-spleen-*-*-*-*-12-*-*-*-*-*-*-*
+xconsole*font:    -*-spleen-*-*-*-*-16-*-*-*-*-*-*-*
 xconsole*scrollBar: false
-xconsole*borderWidth: 4
+xconsole*borderWidth: 3
 xconsole*borderColor: #ebdbb2
 xconsole*iconic:    true
 xconsole*verbose:   true
@@ -58,19 +58,19 @@ xconsole*verbose:   true
 
 xmessage*background: #1d2021
 xmessage*foreground: #fbf1c7
-xmessage.borderWidth: 4
+xmessage.borderWidth: 3
 xmessage*borderColor: #ebdbb2
 xmessage*message.scrollHorizontal: Never
 xmessage*message.scrollVertical: Never
 xmessage*timeout: 0
 xmessage*printValue: false
-xmessage*font:      -*-spleen-*-*-*-*-12-*-*-*-*-*-*-*
+xmessage*font:      -*-spleen-*-*-*-*-16-*-*-*-*-*-*-*
 
 !!
 ! XClock
 !!
 
-xclock*borderWidth: 4
+xclock*borderWidth: 3
 xclock*borderColor: #ebdbb2
 xclock*majorColor: #fbf1c7
 xclock*minorColor: #ebdbb2
@@ -83,11 +83,11 @@ xclock*secondColor: #8ec07c
 !!
 
 ! border/shadow
-xlogin*borderWidth: 4
+xlogin*borderWidth: 3
 xlogin*borderColor: #d5c4a1
 
 ! Login Box
-xlogin.Login.sepWidth: 2
+xlogin.Login.sepWidth: 3
 xlogin.Login.echoPasswd: true
 xlogin.Login.hiColor: #665c54
 xlogin.Login.shdColor: #282828
