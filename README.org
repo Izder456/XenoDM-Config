@@ -68,8 +68,8 @@ xlogin*passwdPrompt: \040\040pass=>
 xlogin*fail: Login incorrect or forbidden
 
 ! Fontfaces
-xlogin*greetFace:       FreeSerif-16:style=Bold Italic:dpi=96
-xlogin*face:            FreeSerif-12:style=Regular:dpi=96
+xlogin*greetFace:       FreeSerif-18:style=Bold Italic:dpi=96
+xlogin*face:            FreeSerif-16:style=Regular:dpi=96
 xlogin*promptFace:      Spleen-16:style=Regular:dpi=96
 xlogin*failFace:        FreeSerif-14:style=Bold Italic:dpi=96
 
@@ -77,7 +77,7 @@ xlogin*failFace:        FreeSerif-14:style=Bold Italic:dpi=96
 ! XConsole
 !!
 
-xconsole*font:    -*-spleen-*-*-*-*-16-*-*-*-*-*-*-*
+xconsole*font:    -*-spleen-*-*-*-*-12-*-*-*-*-*-*-*
 xconsole*scrollBar: false
 xconsole*borderWidth: 3
 xconsole*borderColor: #ebdbb2
@@ -96,7 +96,7 @@ xmessage*message.scrollHorizontal: Never
 xmessage*message.scrollVertical: Never
 xmessage*timeout: 0
 xmessage*printValue: false
-xmessage*font:      -*-spleen-*-*-*-*-16-*-*-*-*-*-*-*
+xmessage*font:      -*-spleen-*-*-*-*-12-*-*-*-*-*-*-*
 
 !!
 ! XClock
