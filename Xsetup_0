@@ -12,8 +12,8 @@ exec_prefix="${prefix}"
 XWIDTH=$(xdpyinfo | awk '/dimensions/ {print $2}' | cut -d 'x' -f 1)
 XHEIGHT=$(xdpyinfo | awk '/dimensions/ {print $2}' | cut -d 'x' -f 2)
 
-# Randomized the wallpaper and fill
-/usr/local/bin/feh --bg-fill "$(/usr/local/bin/shuf -n1 -e /usr/local/share/backgrounds/*)" &
+# Randomize the wallpaper and fill
+/usr/local/bin/feh --bg-fill --randomize /usr/local/share/backgrounds/ &
 
 ##
 # Set program geometry
