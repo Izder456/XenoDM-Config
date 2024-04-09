@@ -172,91 +172,77 @@ xlogin*logoPadding: 14
 #+BEGIN_SRC shell :tangle Xsetup_0
 #!/bin/ksh
 
-xrandr --output default --dpi 96 # Set Screen DPI
-xset b on # Re-Enable XBELL
-xset fp+ /usr/local/share/fonts/spleen # Add Spleen to the XFONTS
+# Set Screen DPI and Re-Enable XBELL
+xrandr --output default --dpi 96
+xset b on
+
+# Add Spleen to the XFONTS
+xset fp+ /usr/local/share/fonts/spleen
 
 # Set Prefix for commands used
 prefix="/usr/X11R6"
 exec_prefix="${prefix}"
 
-# Grab the Screen Dimentions and save into globals
-XWIDTH=$(xdpyinfo | awk '/dimensions/ {print $2}' | cut -d 'x' -f 1)
-XHEIGHT=$(xdpyinfo | awk '/dimensions/ {print $2}' | cut -d 'x' -f 2)
+# Function to get screen dimensions
+function get_screen_dimension {
+    dimension=$(xdpyinfo | awk '/dimensions/ {print $2}')
+    case $1 in
+        0) echo $dimension | cut -d 'x' -f 1 ;;
+        1) echo $dimension | cut -d 'x' -f 2 ;;
+        ,*) echo "Invalid argument. Use 0 for width or 1 for height." ;;
+    esac
+}
+
+# Grab the Screen Dimensions and save into globals
+XWIDTH=$(get_screen_dimension 0)
+XHEIGHT=$(get_screen_dimension 1)
 
 # Randomize the wallpaper and fill
 /usr/local/bin/feh --bg-fill --randomize /usr/local/share/backgrounds/ &
 
-##
 # Set program geometry
-##
-
-# XClock
 XCLOCK_WIDTH=128
 XCLOCK_HEIGHT=128
 XCLOCK_YOFFSET=64
 XCLOCK_XPOS=$((($XWIDTH - $XCLOCK_WIDTH) / 2))
 
-# XMessage
 XMESG_WIDTH=256
 XMESG_HEIGHT=64
 XMESG_YOFFSET=256
 XMESG_XPOS=$((($XWIDTH - $XMESG_WIDTH) / 2))
 
-# XConsole
 XCONSOLE_WIDTH=512
 XCONSOLE_HEIGHT=128
 XCONSOLE_YOFFSET=80
 XCONSOLE_XPOS=$((($XWIDTH - $XCONSOLE_WIDTH) / 2))
 
-##
 # Menu Event Loop
-##
-
-# We need to () this to block it.
 (
     while true; do
-        # Display the message window with buttons, assigned to click events 20, 21, 22, & 23 respectively
         xmessage "System Menu" \
                  -buttons "SLEEP[]":20,"RESTART[]":21,"SHUTDOWN[]":22,"SCROT[]":23 "" \
                  -geometry ${XMESG_WIDTH}x${XMESG_HEIGHT}+${XMESG_XPOS}-${XMESG_YOFFSET}
-        # Grab click event number, assign to ACTION
         ACTION=$?
-        # Yell to stdout what happened
         echo "Xmessage said: $ACTION"
 
-        ##
-        # Action Handling
-        ##
-        if   [ $ACTION -eq 20 ]; then # Sleep Action
-            /usr/sbin/zzz;
-        elif [ $ACTION -eq 21 ]; then # Reboot Host
-            xsetroot -cursor_name watch
-            /sbin/shutdown -r now
-        elif [ $ACTION -eq 22 ]; then # Halt Host
-            xsetroot -cursor_name watch
-            /sbin/shutdown -p now
-        elif [ $ACTION -eq 23 ]; then # Take Screenshot
-            xwd -out /tmp/xenodm.xwd -root
-            print "Took Screenshot at /tmp/xenodm.xwd" >/dev/console
-        else
-            print "XMessage said: WAITING">/dev/console;
-        fi
-        if [ -z "$(pgrep -U root xconsole)" ]; then # Halt Event Loop
+        case $ACTION in
+            20) /usr/sbin/zzz ;;
+            21) xsetroot -cursor_name watch; /sbin/shutdown -r now ;;
+            22) xsetroot -cursor_name watch; /sbin/shutdown -p now ;;
+            23) xwd -out /tmp/xenodm.xwd -root; print "Took Screenshot at /tmp/xenodm.xwd" >/dev/console ;;
+            ,*) print "XMessage said: WAITING">/dev/console ;;
+        esac
+
+        if [ -z "$(pgrep -U root xconsole)" ]; then
             break;
         fi
     done
 ) &
 
-##
 # Spawn Client Windows With Organization
-##
-
-# XConsole
 xconsole -daemon -notify -verbose -exitOnFail -geometry \
          ${XCONSOLE_WIDTH}x${XCONSOLE_HEIGHT}+${XCONSOLE_XPOS}-${XCONSOLE_YOFFSET} &
 
-# XClock
 xclock -analog -update 1 -padding 12 -sharp -geometry \
        ${XCLOCK_WIDTH}x${XCLOCK_HEIGHT}+${XCLOCK_XPOS}+${XCLOCK_YOFFSET} &
 #+END_SRC
