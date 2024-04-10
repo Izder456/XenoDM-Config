@@ -1,11 +1,15 @@
 #!/bin/ksh
 
-# Set Screen DPI and Re-Enable XBELL
-xrandr --output default --dpi 96
-xset b on
-
-# Add Spleen to the XFONTS
-xset fp+ /usr/local/share/fonts/spleen
+# Define variables at the top for easy access
+XCLOCK_WIDTH=128
+XCLOCK_HEIGHT=128
+XCLOCK_YOFFSET=64
+XMESG_WIDTH=312
+XMESG_HEIGHT=64
+XMESG_YOFFSET=312
+XCONSOLE_WIDTH=512
+XCONSOLE_HEIGHT=128
+XCONSOLE_YOFFSET=640
 
 # Set Prefix for commands used
 prefix="/usr/X11R6"
@@ -13,36 +17,77 @@ exec_prefix="${prefix}"
 
 # Function to get screen dimensions
 function get_screen_dimension {
-    dimension=$(xdpyinfo | awk '/dimensions/ {print $2}')
+    typeset dimension=$(xdpyinfo | awk '/dimensions/ {print $2}')
     case $1 in
-        0) echo $dimension | cut -d 'x' -f 1 ;;
-        1) echo $dimension | cut -d 'x' -f 2 ;;
-        *) echo "Invalid argument. Use 0 for width or 1 for height." ;;
+         0) echo ${dimension%x*} ;;
+         1) echo ${dimension#*x} ;;
+         *) echo "Invalid argument. Use 0 for width or 1 for height." ;;
     esac
 }
+
+# Function to load environment
+function load_environment {
+    set -A filees "$@"
+    for file in "${files[@]}"; do
+	if [ -f $file ]; then
+	    . $file
+	fi
+    done
+}
+
+# Function to load resources
+function load_resources {
+    set -A resources "$@"
+    for resource in "${resources[@]}"; do
+	if [ -f $resource ]; then
+	    xrdb -merge $xresource
+	fi
+    done
+}
+
+# Function to manage autostarts
+function manage_autostarts {
+    for process in "$@"; do
+        process_name="${process% *}"
+        if pgrep -x $process_name > /dev/null; then
+            pkill $process_name
+        fi
+        eval $process &
+    done
+}
+
+# Function to spawn client windows with organization
+function spawn_client_windows {
+    typeset app=$1
+    typeset width=$2
+    typeset height=$3
+    typeset xpos=$4
+    typeset yoffset=$5
+    $app -geometry ${width}x${height}+${xpos}+${yoffset} &
+}
+
+# Load in environment & resources
+load_environment /etc/xprofile
+load_resources /etc/X11/xenodm/Xresources
+
+# Autostarts
+manage_autostarts "xrandr --output default --dpi 96" \
+		   "xset b on" \
+		   "xset fp+ /usr/local/share/fonts/spleen" \
+		   "/usr/local/bin/feh --bg-fill --randomize /usr/local/share/backgrounds"
 
 # Grab the Screen Dimensions and save into globals
 XWIDTH=$(get_screen_dimension 0)
 XHEIGHT=$(get_screen_dimension 1)
 
-# Randomize the wallpaper and fill
-/usr/local/bin/feh --bg-fill --randomize /usr/local/share/backgrounds/ &
-
-# Set program geometry
-XCLOCK_WIDTH=128
-XCLOCK_HEIGHT=128
-XCLOCK_YOFFSET=64
-XCLOCK_XPOS=$((($XWIDTH - $XCLOCK_WIDTH) / 2))
-
-XMESG_WIDTH=256
-XMESG_HEIGHT=64
-XMESG_YOFFSET=256
-XMESG_XPOS=$((($XWIDTH - $XMESG_WIDTH) / 2))
-
-XCONSOLE_WIDTH=512
-XCONSOLE_HEIGHT=128
-XCONSOLE_YOFFSET=80
+# Calculate
 XCONSOLE_XPOS=$((($XWIDTH - $XCONSOLE_WIDTH) / 2))
+XCLOCK_XPOS=$((($XWIDTH - $XCLOCK_WIDTH) / 2))
+XMESG_XPOS=$(((XWIDTH - $XMESG_WIDTH) / 2))
+
+# Spawn client windows with organization
+spawn_client_windows "xconsole" $XCONSOLE_WIDTH $XCONSOLE_HEIGHT $XCONSOLE_XPOS $XCONSOLE_YOFFSET
+spawn_client_windows "xclock" $XCLOCK_WIDTH $XCLOCK_HEIGHT $XCLOCK_XPOS $XCLOCK_YOFFSET
 
 # Menu Event Loop
 (
@@ -53,12 +98,12 @@ XCONSOLE_XPOS=$((($XWIDTH - $XCONSOLE_WIDTH) / 2))
         ACTION=$?
         echo "Xmessage said: $ACTION"
 
-        case $ACTION in
-            20) /usr/sbin/zzz ;;
-            21) xsetroot -cursor_name watch; /sbin/shutdown -r now ;;
-            22) xsetroot -cursor_name watch; /sbin/shutdown -p now ;;
-            23) xwd -out /tmp/xenodm.xwd -root; print "Took Screenshot at /tmp/xenodm.xwd" >/dev/console ;;
-            *) print "XMessage said: WAITING">/dev/console ;;
+        case ${ACTION} in
+		20) /usr/sbin/zzz ;;
+		21) xsetroot -cursor_name watch; /sbin/shutdown -r now ;;
+		22) xsetroot -cursor_name watch; /sbin/shutdown -p now ;;
+		24) xwd -out /tmp/xenodm.xwd -root; print "Took Screenshot at /tmp/xenodm.xwd" >/dev/console ;;
+		*) print "XMessage said: WAITING" >/dev/console ;;
         esac
 
         if [ -z "$(pgrep -U root xconsole)" ]; then
@@ -66,10 +111,3 @@ XCONSOLE_XPOS=$((($XWIDTH - $XCONSOLE_WIDTH) / 2))
         fi
     done
 ) &
-
-# Spawn Client Windows With Organization
-xconsole -daemon -notify -verbose -exitOnFail -geometry \
-         ${XCONSOLE_WIDTH}x${XCONSOLE_HEIGHT}+${XCONSOLE_XPOS}-${XCONSOLE_YOFFSET} &
-
-xclock -analog -update 1 -padding 12 -sharp -geometry \
-       ${XCLOCK_WIDTH}x${XCLOCK_HEIGHT}+${XCLOCK_XPOS}+${XCLOCK_YOFFSET} &
