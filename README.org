@@ -275,7 +275,10 @@ spawn_client_windows "xclock" $XCLOCK_WIDTH $XCLOCK_HEIGHT $XCLOCK_XPOS $XCLOCK_
 		20) /usr/sbin/zzz ;;
 		21) xsetroot -cursor_name watch; /sbin/shutdown -r now ;;
 		22) xsetroot -cursor_name watch; /sbin/shutdown -p now ;;
-		24) xwd -out /tmp/xenodm.xwd -root; print "Took Screenshot at /tmp/xenodm.xwd" >/dev/console ;;
+		23) /usr/local/bin/scrot \
+			-z -o -q 100 -Z 0 \
+			-F /tmp/xenodm.png; \
+		    print "Took Screenshot at /tmp/xenodm.png" >/dev/console ;;
 		,*) print "XMessage said: WAITING" >/dev/console ;;
         esac
 
