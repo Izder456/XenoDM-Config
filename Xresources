@@ -31,15 +31,15 @@ xlogin*login.translations: #override \
 
 ! Strings
 xlogin*greeting: XenoDM Login
-xlogin*namePrompt: \040\040user=>
-xlogin*passwdPrompt: \040\040pass=>
+xlogin*namePrompt: user=>
+xlogin*passwdPrompt: pass=>
 xlogin*fail: Login incorrect or forbidden
 
 ! Fontfaces
 xlogin*greetFace:       FreeSerif-18:style=Bold Italic:dpi=96
 xlogin*face:            FreeSerif-16:style=Regular:dpi=96
 xlogin*promptFace:      Spleen-16:style=Regular:dpi=96
-xlogin*failFace:        FreeSerif-14:style=Bold Italic:dpi=96
+xlogin*failFace:        FreeSerif-12:style=Bold Italic:dpi=96
 
 !!
 ! XConsole
@@ -88,21 +88,23 @@ xlogin*borderColor: #d5c4a1
 
 ! Login Box
 xlogin.Login.sepWidth: 3
+xlogin.Login.frameWidth: 0
+xlogin.Login.innerFramesWidth: 0
 xlogin.Login.echoPasswd: true
 xlogin.Login.hiColor: #665c54
 xlogin.Login.shdColor: #282828
 xlogin.Login.greetColor: #fe8019
-xlogin.Login.failColor: #cc241d
-xlogin.Login.promptColor: #d79921
+xlogin.Login.failColor: #fb4934
+xlogin.Login.promptColor: #fabd2f
 xlogin.Login.cursorColor: #bdae93
 xlogin.Login.inpColor: #ebdbb2
 xlogin.Login.foreground: #32302f
 xlogin.Login.background: #1d2021
-xlogin*useShape: true
+xlogin*useShape: false
 
 ! Login Logo
 xlogin*logoFileName: /etc/X11/xenodm/pixmaps/striped_srcerizder.xpm
-xlogin*logoPadding: 14
+xlogin*logoPadding: 12
 
 !!
 ! Gruvbox Colors

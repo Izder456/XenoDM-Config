@@ -1,4 +1,3 @@
-
 #+TITLE: Iz's XenoDM Config
 #+DESCRIPTION: Mainly for personal backups, but if you want 'em, use 'em.
 #+KEYWORDS: org-mode, readme, OpenBSD, XenoDM, sh, ksh, xresources, izder
@@ -51,13 +50,13 @@ xlogin*login.translations: #override \
 ! Basic Colors
 !!
 
-*.foreground: #fbf1c7
-*.Foreground: #fbf1c7
-*.background: #1d2021
-*.Background: #1d2021
-*.activeBackground: #32302f
-*.activeForeground: #d5c4a1
-*.cursorColor: #fbf1c7
+,*.foreground: #fbf1c7
+,*.Foreground: #fbf1c7
+,*.background: #1d2021
+,*.Background: #1d2021
+,*.activeBackground: #32302f
+,*.activeForeground: #d5c4a1
+,*.cursorColor: #fbf1c7
 
 !!
 ! Prompts
@@ -65,15 +64,15 @@ xlogin*login.translations: #override \
 
 ! Strings
 xlogin*greeting: XenoDM Login
-xlogin*namePrompt: \040\040user=>
-xlogin*passwdPrompt: \040\040pass=>
+xlogin*namePrompt: user=>
+xlogin*passwdPrompt: pass=>
 xlogin*fail: Login incorrect or forbidden
 
 ! Fontfaces
 xlogin*greetFace:       FreeSerif-18:style=Bold Italic:dpi=96
 xlogin*face:            FreeSerif-16:style=Regular:dpi=96
 xlogin*promptFace:      Spleen-16:style=Regular:dpi=96
-xlogin*failFace:        FreeSerif-14:style=Bold Italic:dpi=96
+xlogin*failFace:        FreeSerif-12:style=Bold Italic:dpi=96
 
 !!
 ! XConsole
@@ -122,50 +121,52 @@ xlogin*borderColor: #d5c4a1
 
 ! Login Box
 xlogin.Login.sepWidth: 3
+xlogin.Login.frameWidth: 0
+xlogin.Login.innerFramesWidth: 0
 xlogin.Login.echoPasswd: true
 xlogin.Login.hiColor: #665c54
 xlogin.Login.shdColor: #282828
 xlogin.Login.greetColor: #fe8019
-xlogin.Login.failColor: #cc241d
-xlogin.Login.promptColor: #d79921
+xlogin.Login.failColor: #fb4934
+xlogin.Login.promptColor: #fabd2f
 xlogin.Login.cursorColor: #bdae93
 xlogin.Login.inpColor: #ebdbb2
 xlogin.Login.foreground: #32302f
 xlogin.Login.background: #1d2021
-xlogin*useShape: true
+xlogin*useShape: false
 
 ! Login Logo
 xlogin*logoFileName: /etc/X11/xenodm/pixmaps/striped_srcerizder.xpm
-xlogin*logoPadding: 14
+xlogin*logoPadding: 12
 
 !!
 ! Gruvbox Colors
 !!
 
 ! Black + DarkGrey
-*color0:  #282828
-*color8:  #928374
+,*color0:  #282828
+,*color8:  #928374
 ! DarkRed + Red
-*color1:  #cc241d
-*color9:  #fb4934
+,*color1:  #cc241d
+,*color9:  #fb4934
 ! DarkGreen + Green
-*color2:  #98971a
-*color10: #b8bb26
+,*color2:  #98971a
+,*color10: #b8bb26
 ! DarkYellow + Yellow
-*color3:  #d79921
-*color11: #fabd2f
+,*color3:  #d79921
+,*color11: #fabd2f
 ! DarkBlue + Blue
-*color4:  #458588
-*color12: #83a598
+,*color4:  #458588
+,*color12: #83a598
 ! DarkMagenta + Magenta
-*color5:  #b16286
-*color13: #d3869b
+,*color5:  #b16286
+,*color13: #d3869b
 ! DarkCyan + Cyan
-*color6:  #689d6a
-*color14: #8ec07c
+,*color6:  #689d6a
+,*color14: #8ec07c
 ! LightGrey + White
-*color7:  #a89984
-*color15: #ebdbb2
+,*color7:  #a89984
+,*color15: #ebdbb2
 #+END_SRC
 
 * Setup
@@ -192,8 +193,8 @@ exec_prefix="${prefix}"
 function get_screen_dimension {
     typeset dimension=$(xdpyinfo | awk '/dimensions/ {print $2}')
     case $1 in
-         0) echo ${dimension%x*} ;;
-         1) echo ${dimension#*x} ;;
+         0) echo "${dimension%x*}" ;;
+         1) echo "${dimension#*x}" ;;
          ,*) echo "Invalid argument. Use 0 for width or 1 for height." ;;
     esac
 }
@@ -202,8 +203,8 @@ function get_screen_dimension {
 function load_environment {
     set -A filees "$@"
     for file in "${files[@]}"; do
-	if [ -f $file ]; then
-	    . $file
+	if [ -f "$file" ]; then
+	    . "$file"
 	fi
     done
 }
@@ -212,8 +213,8 @@ function load_environment {
 function load_resources {
     set -A resources "$@"
     for resource in "${resources[@]}"; do
-	if [ -f $resource ]; then
-	    xrdb -merge $xresource
+	if [ -f "$resource" ]; then
+	    xrdb -merge "$xresource"
 	fi
     done
 }
@@ -222,10 +223,10 @@ function load_resources {
 function manage_autostarts {
     for process in "$@"; do
         process_name="${process% *}"
-        if pgrep -x $process_name > /dev/null; then
-            pkill $process_name
+        if pgrep -x "$process_name" > /dev/null; then
+            pkill "$process_name"
         fi
-        eval $process &
+        eval "$process" &
     done
 }
 
@@ -236,7 +237,7 @@ function spawn_client_windows {
     typeset height=$3
     typeset xpos=$4
     typeset yoffset=$5
-    $app -geometry ${width}x${height}+${xpos}+${yoffset} &
+    $app -geometry "${width}"x"${height}"+"${xpos}"+"${yoffset}" &
 }
 
 # Load in environment & resources
@@ -260,7 +261,7 @@ XMESG_XPOS=$(((XWIDTH - $XMESG_WIDTH) / 2))
 
 # Spawn client windows with organization
 spawn_client_windows "xconsole" $XCONSOLE_WIDTH $XCONSOLE_HEIGHT $XCONSOLE_XPOS $XCONSOLE_YOFFSET
-spawn_client_windows "xclock" $XCLOCK_WIDTH $XCLOCK_HEIGHT $XCLOCK_XPOS $XCLOCK_YOFFSET
+spawn_client_windows "xclock -sharp -update 1" $XCLOCK_WIDTH $XCLOCK_HEIGHT $XCLOCK_XPOS $XCLOCK_YOFFSET
 
 # Menu Event Loop
 (

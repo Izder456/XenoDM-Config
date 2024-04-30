@@ -19,8 +19,8 @@ exec_prefix="${prefix}"
 function get_screen_dimension {
     typeset dimension=$(xdpyinfo | awk '/dimensions/ {print $2}')
     case $1 in
-         0) echo ${dimension%x*} ;;
-         1) echo ${dimension#*x} ;;
+         0) echo "${dimension%x*}" ;;
+         1) echo "${dimension#*x}" ;;
          *) echo "Invalid argument. Use 0 for width or 1 for height." ;;
     esac
 }
@@ -29,8 +29,8 @@ function get_screen_dimension {
 function load_environment {
     set -A filees "$@"
     for file in "${files[@]}"; do
-	if [ -f $file ]; then
-	    . $file
+	if [ -f "$file" ]; then
+	    . "$file"
 	fi
     done
 }
@@ -39,8 +39,8 @@ function load_environment {
 function load_resources {
     set -A resources "$@"
     for resource in "${resources[@]}"; do
-	if [ -f $resource ]; then
-	    xrdb -merge $xresource
+	if [ -f "$resource" ]; then
+	    xrdb -merge "$xresource"
 	fi
     done
 }
@@ -49,10 +49,10 @@ function load_resources {
 function manage_autostarts {
     for process in "$@"; do
         process_name="${process% *}"
-        if pgrep -x $process_name > /dev/null; then
-            pkill $process_name
+        if pgrep -x "$process_name" > /dev/null; then
+            pkill "$process_name"
         fi
-        eval $process &
+        eval "$process" &
     done
 }
 
@@ -63,7 +63,7 @@ function spawn_client_windows {
     typeset height=$3
     typeset xpos=$4
     typeset yoffset=$5
-    $app -geometry ${width}x${height}+${xpos}+${yoffset} &
+    $app -geometry "${width}"x"${height}"+"${xpos}"+"${yoffset}" &
 }
 
 # Load in environment & resources
@@ -87,7 +87,7 @@ XMESG_XPOS=$(((XWIDTH - $XMESG_WIDTH) / 2))
 
 # Spawn client windows with organization
 spawn_client_windows "xconsole" $XCONSOLE_WIDTH $XCONSOLE_HEIGHT $XCONSOLE_XPOS $XCONSOLE_YOFFSET
-spawn_client_windows "xclock" $XCLOCK_WIDTH $XCLOCK_HEIGHT $XCLOCK_XPOS $XCLOCK_YOFFSET
+spawn_client_windows "xclock -sharp -update 1" $XCLOCK_WIDTH $XCLOCK_HEIGHT $XCLOCK_XPOS $XCLOCK_YOFFSET
 
 # Menu Event Loop
 (
