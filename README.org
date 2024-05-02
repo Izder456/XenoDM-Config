@@ -80,7 +80,7 @@ xlogin*failFace:        FreeSerif-12:style=Bold Italic:dpi=96
 
 xconsole*font:    -*-spleen-*-*-*-*-12-*-*-*-*-*-*-*
 xconsole*scrollBar: false
-xconsole*borderWidth: 3
+xconsole*borderWidth: 1 
 xconsole*borderColor: #ebdbb2
 xconsole*iconic:    true
 xconsole*verbose:   true
@@ -91,7 +91,7 @@ xconsole*verbose:   true
 
 xmessage*background: #1d2021
 xmessage*foreground: #fbf1c7
-xmessage.borderWidth: 3
+xmessage.borderWidth: 1
 xmessage*borderColor: #ebdbb2
 xmessage*message.scrollHorizontal: Never
 xmessage*message.scrollVertical: Never
@@ -103,7 +103,7 @@ xmessage*font:      -*-spleen-*-*-*-*-12-*-*-*-*-*-*-*
 ! XClock
 !!
 
-xclock*borderWidth: 3
+xclock*borderWidth: 1 
 xclock*borderColor: #ebdbb2
 xclock*majorColor: #fbf1c7
 xclock*minorColor: #ebdbb2
@@ -116,11 +116,11 @@ xclock*secondColor: #8ec07c
 !!
 
 ! border/shadow
-xlogin*borderWidth: 3
+xlogin*borderWidth: 1
 xlogin*borderColor: #d5c4a1
 
 ! Login Box
-xlogin.Login.sepWidth: 3
+xlogin.Login.sepWidth: 1
 xlogin.Login.frameWidth: 0
 xlogin.Login.innerFramesWidth: 0
 xlogin.Login.echoPasswd: true
@@ -137,7 +137,7 @@ xlogin*useShape: false
 
 ! Login Logo
 xlogin*logoFileName: /etc/X11/xenodm/pixmaps/striped_srcerizder.xpm
-xlogin*logoPadding: 12
+xlogin*logoPadding: 10
 
 !!
 ! Gruvbox Colors
@@ -177,13 +177,13 @@ xlogin*logoPadding: 12
 # Define variables at the top for easy access
 XCLOCK_WIDTH=128
 XCLOCK_HEIGHT=128
-XCLOCK_YOFFSET=64
+XCLOCK_YOFFSET=48
 XMESG_WIDTH=312
 XMESG_HEIGHT=64
-XMESG_YOFFSET=312
+XMESG_YOFFSET=256
 XCONSOLE_WIDTH=512
-XCONSOLE_HEIGHT=128
-XCONSOLE_YOFFSET=640
+XCONSOLE_HEIGHT=112
+XCONSOLE_YOFFSET=672
 
 # Set Prefix for commands used
 prefix="/usr/X11R6"
