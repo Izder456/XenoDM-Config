@@ -13,6 +13,9 @@ xlogin*login.translations: #override \
   Ctrl<Key>Return: set-session-argument(failsafe) finish-field()\n\
   <Key>Return: set-session-argument() finish-field()
 
+! Motif Look & Fell
+*lookAndFeel: motif
+  
 !!
 ! Basic Colors
 !!
