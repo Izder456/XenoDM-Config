@@ -36,19 +36,19 @@
 !!
 
 xlogin*login.translations: #override \
-  <Key>F1: set-session-argument(failsafe) finish-field()\n\
-  <Key>Left: move-backward-character()\n\
-  <Key>Right: move-forward-character()\n\
-  <Key>Home: move-to-begining()\n\
-  <Key>End: move-to-end()\n\
-  Ctrl<Key>KP_Enter: set-session-argument(failsafe) finish-field()\n\
-  <Key>KP_Enter: set-session-argument() finish-field()\n\
-  Ctrl<Key>Return: set-session-argument(failsafe) finish-field()\n\
-  <Key>Return: set-session-argument() finish-field()
+<Key>F1: set-session-argument(failsafe) finish-field()\n\
+<Key>Left: move-backward-character()\n\
+<Key>Right: move-forward-character()\n\
+<Key>Home: move-to-begining()\n\
+<Key>End: move-to-end()\n\
+Ctrl<Key>KP_Enter: set-session-argument(failsafe) finish-field()\n\
+<Key>KP_Enter: set-session-argument() finish-field()\n\
+Ctrl<Key>Return: set-session-argument(failsafe) finish-field()\n\
+<Key>Return: set-session-argument() finish-field()
 
 ! Motif Look & Fell
 ,*lookAndFeel: motif
-  
+
 !!
 ! Basic Colors
 !!
@@ -196,9 +196,9 @@ exec_prefix="${prefix}"
 function get_screen_dimension {
     typeset dimension=$(xdpyinfo | awk '/dimensions/ {print $2}')
     case $1 in
-         0) echo "${dimension%x*}" ;;
-         1) echo "${dimension#*x}" ;;
-         ,*) echo "Invalid argument. Use 0 for width or 1 for height." ;;
+        0) echo "${dimension%x*}" ;;
+        1) echo "${dimension#*x}" ;;
+        ,*) echo "Invalid argument. Use 0 for width or 1 for height." ;;
     esac
 }
 
@@ -249,9 +249,9 @@ load_resources /etc/X11/xenodm/Xresources
 
 # Autostarts
 manage_autostarts "xrandr --output default --dpi 96" \
-		   "xset b on" \
-		   "xset fp+ /usr/local/share/fonts/spleen" \
-		   "/usr/local/bin/feh --bg-fill --randomize /usr/local/share/backgrounds"
+		  "xset b on" \
+		  "xset fp+ /usr/local/share/fonts/spleen" \
+		  "/usr/local/bin/feh --bg-fill --randomize /usr/local/share/backgrounds"
 
 # Grab the Screen Dimensions and save into globals
 XWIDTH=$(get_screen_dimension 0)
@@ -276,14 +276,14 @@ spawn_client_windows "xclock -sharp -update 1" $XCLOCK_WIDTH $XCLOCK_HEIGHT $XCL
         echo "Xmessage said: $ACTION"
 
         case ${ACTION} in
-		20) /usr/sbin/zzz ;;
-		21) xsetroot -cursor_name watch; /sbin/shutdown -r now ;;
-		22) xsetroot -cursor_name watch; /sbin/shutdown -p now ;;
-		23) /usr/local/bin/scrot \
-			-z -o -q 100 -Z 0 \
-			-F /tmp/xenodm.png; \
-		    print "Took Screenshot at /tmp/xenodm.png" >/dev/console ;;
-		,*) print "XMessage said: WAITING" >/dev/console ;;
+	    20) /usr/sbin/zzz ;;
+	    21) xsetroot -cursor_name watch; /sbin/shutdown -r now ;;
+	    22) xsetroot -cursor_name watch; /sbin/shutdown -p now ;;
+	    23) /usr/local/bin/scrot \
+		    -z -o -q 100 -Z 0 \
+		    -F /tmp/xenodm.png; \
+		print "Took Screenshot at /tmp/xenodm.png" >/dev/console ;;
+	    ,*) print "XMessage said: WAITING" >/dev/console ;;
         esac
 
         if [ -z "$(pgrep -U root xconsole)" ]; then
