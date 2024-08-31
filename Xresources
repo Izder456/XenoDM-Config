@@ -48,7 +48,7 @@ xlogin*failFace:        FreeSerif-12:style=Bold Italic:dpi=96
 ! XConsole
 !!
 
-xconsole*font:    -*-spleen-*-*-*-*-12-*-*-*-*-*-*-*
+xconsole*font:      -*-spleen-*-*-*-*-16-*-*-*-*-*-*-*
 xconsole*scrollBar: false
 xconsole*borderWidth: 1 
 xconsole*borderColor: #ebdbb2

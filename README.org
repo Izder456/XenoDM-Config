@@ -25,7 +25,7 @@
 * Table of Contents :TOC_4:
 - [[#disclaimer][DISCLAIMER]]
 - [[#xresources][Xresources]]
-- [[#setup][Setup]]
+- [[#xsetup_0][Xsetup_0]]
 - [[#giveconsole][GiveConsole]]
 
 * Xresources
@@ -81,7 +81,7 @@ xlogin*failFace:        FreeSerif-12:style=Bold Italic:dpi=96
 ! XConsole
 !!
 
-xconsole*font:    -*-spleen-*-*-*-*-12-*-*-*-*-*-*-*
+xconsole*font:      -*-spleen-*-*-*-*-16-*-*-*-*-*-*-*
 xconsole*scrollBar: false
 xconsole*borderWidth: 1 
 xconsole*borderColor: #ebdbb2
@@ -172,21 +172,23 @@ xlogin*logoPadding: 10
 ,*color15: #ebdbb2
 #+END_SRC
 
-* Setup
+* Xsetup_0
+
+For the first display head
 
 #+BEGIN_SRC shell :tangle Xsetup_0
 #!/bin/ksh
 
 # Define variables at the top for easy access
-XCLOCK_WIDTH=128
-XCLOCK_HEIGHT=128
-XCLOCK_YOFFSET=48
-XMESG_WIDTH=312
-XMESG_HEIGHT=64
-XMESG_YOFFSET=256
-XCONSOLE_WIDTH=512
-XCONSOLE_HEIGHT=112
-XCONSOLE_YOFFSET=672
+readonly XCLOCK_WIDTH=312
+readonly XCLOCK_HEIGHT=64
+readonly XCLOCK_YOFFSET=48
+readonly XMESG_WIDTH=312
+readonly XMESG_HEIGHT=64
+readonly XMESG_YOFFSET=256
+readonly XCONSOLE_WIDTH=512
+readonly XCONSOLE_HEIGHT=112
+readonly XCONSOLE_YOFFSET=672
 
 # Set Prefix for commands used
 prefix="/usr/X11R6"
@@ -206,9 +208,7 @@ function get_screen_dimension {
 function load_environment {
     set -A filees "$@"
     for file in "${files[@]}"; do
-	if [ -f "$file" ]; then
-	    . "$file"
-	fi
+	[ -f "$file" ] && . "$file"
     done
 }
 
@@ -216,9 +216,7 @@ function load_environment {
 function load_resources {
     set -A resources "$@"
     for resource in "${resources[@]}"; do
-	if [ -f "$resource" ]; then
-	    xrdb -merge "$xresource"
-	fi
+	[ -f "$resource" ] && xrdb -merge "$xresource"
     done
 }
 
@@ -249,9 +247,9 @@ load_resources /etc/X11/xenodm/Xresources
 
 # Autostarts
 manage_autostarts "xrandr --output default --dpi 96" \
-		  "xset b on" \
-		  "xset fp+ /usr/local/share/fonts/spleen" \
-		  "/usr/local/bin/feh --bg-fill --randomize /usr/local/share/backgrounds"
+                  "xset b on" \
+                  "xset fp+ /usr/local/share/fonts/spleen" \
+                  "/usr/local/bin/feh --bg-fill --randomize /usr/local/share/backgrounds"
 
 # Grab the Screen Dimensions and save into globals
 XWIDTH=$(get_screen_dimension 0)
@@ -260,11 +258,11 @@ XHEIGHT=$(get_screen_dimension 1)
 # Calculate
 XCONSOLE_XPOS=$((($XWIDTH - $XCONSOLE_WIDTH) / 2))
 XCLOCK_XPOS=$((($XWIDTH - $XCLOCK_WIDTH) / 2))
-XMESG_XPOS=$(((XWIDTH - $XMESG_WIDTH) / 2))
+XMESG_XPOS=$((($XWIDTH - $XMESG_WIDTH) / 2))
 
 # Spawn client windows with organization
 spawn_client_windows "xconsole" $XCONSOLE_WIDTH $XCONSOLE_HEIGHT $XCONSOLE_XPOS $XCONSOLE_YOFFSET
-spawn_client_windows "xclock -sharp -update 1" $XCLOCK_WIDTH $XCLOCK_HEIGHT $XCLOCK_XPOS $XCLOCK_YOFFSET
+spawn_client_windows "xclock -update 1" $XCLOCK_WIDTH $XCLOCK_HEIGHT $XCLOCK_XPOS $XCLOCK_YOFFSET
 
 # Menu Event Loop
 (
@@ -273,7 +271,7 @@ spawn_client_windows "xclock -sharp -update 1" $XCLOCK_WIDTH $XCLOCK_HEIGHT $XCL
                  -buttons "SLEEP[]":20,"RESTART[]":21,"SHUTDOWN[]":22,"SCROT[]":23 "" \
                  -geometry ${XMESG_WIDTH}x${XMESG_HEIGHT}+${XMESG_XPOS}-${XMESG_YOFFSET}
         ACTION=$?
-        echo "Xmessage said: $ACTION"
+        logger "Xmessage said: $ACTION"
 
         case ${ACTION} in
 	    20) /usr/sbin/zzz ;;
@@ -282,8 +280,8 @@ spawn_client_windows "xclock -sharp -update 1" $XCLOCK_WIDTH $XCLOCK_HEIGHT $XCL
 	    23) /usr/local/bin/scrot \
 		    -z -o -q 100 -Z 0 \
 		    -F /tmp/xenodm.png; \
-		print "Took Screenshot at /tmp/xenodm.png" >/dev/console ;;
-	    ,*) print "XMessage said: WAITING" >/dev/console ;;
+		logger "Took Screenshot at /tmp/xenodm.png" >/dev/console ;;
+	    ,*) logger "XMessage said: WAITING" >/dev/console ;;
         esac
 
         if [ -z "$(pgrep -U root xconsole)" ]; then
