@@ -1,9 +1,9 @@
 #!/bin/ksh
 
 # Define variables at the top for easy access
-readonly XCLOCK_WIDTH=312
-readonly XCLOCK_HEIGHT=64
-readonly XCLOCK_YOFFSET=48
+readonly XCLOCK_WIDTH=132
+readonly XCLOCK_HEIGHT=132
+readonly XCLOCK_YOFFSET=32
 readonly XMESG_WIDTH=312
 readonly XMESG_HEIGHT=64
 readonly XMESG_YOFFSET=256
@@ -83,7 +83,7 @@ XMESG_XPOS=$((($XWIDTH - $XMESG_WIDTH) / 2))
 
 # Spawn client windows with organization
 spawn_client_windows "xconsole" $XCONSOLE_WIDTH $XCONSOLE_HEIGHT $XCONSOLE_XPOS $XCONSOLE_YOFFSET
-spawn_client_windows "xclock -update 1" $XCLOCK_WIDTH $XCLOCK_HEIGHT $XCLOCK_XPOS $XCLOCK_YOFFSET
+spawn_client_windows "xclock -render -sharp -update 1" $XCLOCK_WIDTH $XCLOCK_HEIGHT $XCLOCK_XPOS $XCLOCK_YOFFSET
 
 # Menu Event Loop
 (
