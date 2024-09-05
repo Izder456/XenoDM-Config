@@ -196,7 +196,7 @@ exec_prefix="${prefix}"
 
 # Function to get screen dimensions
 function get_screen_dimension {
-    typeset dimension=$(xdpyinfo | awk '/dimensions/ {print $2}')
+    typeset dimension=$(xrandr --current | grep '*' | uniq | awk '{print $1}')
     case $1 in
         0) echo "${dimension%x*}" ;;
         1) echo "${dimension#*x}" ;;
@@ -270,8 +270,8 @@ spawn_client_windows "xclock -render -sharp -update 1" $XCLOCK_WIDTH $XCLOCK_HEI
         xmessage "System Menu" \
                  -buttons "SLEEP[]":20,"RESTART[]":21,"SHUTDOWN[]":22,"SCROT[]":23 "" \
                  -geometry ${XMESG_WIDTH}x${XMESG_HEIGHT}+${XMESG_XPOS}-${XMESG_YOFFSET}
-        ACTION=$?
-        logger "Xmessage said: $ACTION"
+        typeset action=$?
+        logger "Xmessage said: $action"
 
         case ${ACTION} in
 	    20) /usr/sbin/zzz ;;
