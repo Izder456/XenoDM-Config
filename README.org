@@ -46,8 +46,8 @@ Ctrl<Key>KP_Enter: set-session-argument(failsafe) finish-field()\n\
 Ctrl<Key>Return: set-session-argument(failsafe) finish-field()\n\
 <Key>Return: set-session-argument() finish-field()
 
-! Motif Look & Fell
-,*lookAndFeel: motif
+! Motif Look & Feel
+*lookAndFeel: motif
 
 !!
 ! Basic Colors
@@ -273,12 +273,12 @@ spawn_client_windows "xclock -render -sharp -update 1" $XCLOCK_WIDTH $XCLOCK_HEI
         typeset action=$?
         logger "Xmessage said: $action"
 
-        case ${ACTION} in
+        case ${action} in
 	    20) /usr/sbin/zzz ;;
 	    21) xsetroot -cursor_name watch; /sbin/shutdown -r now ;;
 	    22) xsetroot -cursor_name watch; /sbin/shutdown -p now ;;
 	    23) /usr/local/bin/scrot \
-		    -z -o -q 100 -Z 0 \
+		    -f -z -o -q 100 -Z 0 \
 		    -F /tmp/xenodm.png; \
 		logger "Took Screenshot at /tmp/xenodm.png" >/dev/console ;;
 	    ,*) logger "XMessage said: WAITING" >/dev/console ;;

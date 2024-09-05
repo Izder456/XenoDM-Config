@@ -13,7 +13,7 @@ Ctrl<Key>KP_Enter: set-session-argument(failsafe) finish-field()\n\
 Ctrl<Key>Return: set-session-argument(failsafe) finish-field()\n\
 <Key>Return: set-session-argument() finish-field()
 
-! Motif Look & Fell
+! Motif Look & Feel
 *lookAndFeel: motif
 
 !!
